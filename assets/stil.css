@@ -244,7 +244,10 @@ dialog.gross button:focus-visible { outline: 2px solid var(--tinte); outline-off
 dialog.gross button:active { transform: translateY(1px); }
 .gross-zu { position: absolute; z-index: 2; top: 20px; right: var(--rand); font-size: 0.875rem; padding: 8px 0; }
 /* Pfeilflächen nur im mittleren Bereich, damit oben rechts nur „Schließen“ reagiert */
-.gross-pfeil { font-size: 1.75rem; height: 60vh; width: 72px; align-self: center; }
+/* Pfeile: feine, angedeutete Linien statt grober Zeichen (Milan 19.11.) */
+.gross-pfeil { height: 60vh; width: 72px; align-self: center; display: flex; align-items: center; justify-content: center; opacity: 0.55; transition: opacity 0.25s ease; }
+.gross-pfeil:hover, .gross-pfeil:focus-visible { opacity: 1; }
+.gross-pfeil svg { display: block; }
 .gross-zurueck { grid-column: 1; grid-row: 1; }
 dialog.gross figure { grid-column: 2; grid-row: 1; }
 .gross-weiter { grid-column: 3; grid-row: 1; }
