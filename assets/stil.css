@@ -1,0 +1,278 @@
+/* ==========================================================================
+   Milan Glatzer · Fotografie
+   Ruhige Galerie-Optik: kühles Hellgrau, dunkle Tinte, keine Akzentfarbe.
+   Die Bilder tragen die Farbe, die Seite hält sich zurück.
+   ========================================================================== */
+
+/* --- Schrift (selbst gehostet, keine Google-Verbindung) -------------------
+   Hanken Grotesk (SIL Open Font License, siehe fonts/OFL-Hanken-Grotesk.txt).
+   Milan 19.11.: schlichte Schrift ohne Serifen, damit die Bilder sprechen
+   (vorher Cormorant Garamond = dieselbe wie Martas Berlinando-Seite). */
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("fonts/hanken-grotesk-latin-300-normal.woff2") format("woff2");
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("fonts/hanken-grotesk-latin-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Hanken Grotesk";
+  src: url("fonts/hanken-grotesk-latin-500-normal.woff2") format("woff2");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+
+/* --- Farben & Maße (einzige Stelle für Werte) ---------------------------- */
+:root {
+  --papier: #e8ebea;      /* Hintergrund: kühles Hellgrau – warme, helle Bilder heben sich ab (Milan 19.11., vorher #f1ede5) */
+  --tinte: #2a2825;       /* Text */
+  --leise: #6b665e;       /* Nebentext (Kontrast 4,75:1 auf #e8ebea) */
+  --linie: rgba(42, 40, 37, 0.18);
+  --rand: clamp(16px, 4vw, 56px);
+  /* Eine Schrift für alles; --serif/--sans bleiben als Namen, zeigen aber auf dieselbe */
+  --serif: "Hanken Grotesk", ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --sans: var(--serif);
+  --kopf-hoehe: 64px;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+/* Kein weiches Scrollen: Sprünge (z. B. „Kontakt“) sollen sofort und ruhig sein,
+   nicht über 24 Bilder hinweg rauschen (Milan 19.11.: wirkte hektisch) */
+html { scroll-padding-top: var(--kopf-hoehe); }
+
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--tinte);
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img { display: block; max-width: 100%; height: auto; }
+h1, h2 { font-weight: 300; margin: 0; }
+p { margin: 0 0 1em; }
+
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-color: var(--leise); }
+a:focus-visible, .knopf:focus-visible {
+  outline: 2px solid var(--tinte);
+  outline-offset: 4px;
+}
+
+/* Sprunglink für Tastatur/Screenreader */
+.sprung {
+  position: absolute; left: var(--rand); top: -100px;
+  background: var(--tinte); color: var(--papier); padding: 8px 14px; z-index: 20;
+  font-family: var(--sans); font-size: 0.875rem;
+}
+.sprung:focus { top: 8px; }
+
+/* --- Kopfzeile ------------------------------------------------------------ */
+.kopf {
+  position: sticky; top: 0; z-index: 10;
+  height: var(--kopf-hoehe);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 0 var(--rand);
+  background: color-mix(in srgb, var(--papier) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.kopf-name { font-size: 1.125rem; font-weight: 500; text-decoration: none; letter-spacing: 0; }
+.kopf nav { display: flex; gap: clamp(14px, 2.4vw, 32px); font-family: var(--sans); font-size: 0.875rem; }
+.kopf nav a { text-decoration: none; color: var(--leise); }
+.kopf nav a:hover { color: var(--tinte); }
+.kopf nav a:active { transform: translateY(1px); }
+.kopf .sprache { color: var(--tinte); }
+.kopf nav a[aria-current="page"] { color: var(--tinte); text-decoration: underline; text-underline-offset: 0.35em; }
+
+/* --- Startbereich --------------------------------------------------------- */
+.start {
+  min-height: calc(100svh - var(--kopf-hoehe));
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 24px;
+  align-items: end;
+  padding: 24px var(--rand) 8vh;
+}
+.start-text { grid-column: 1 / span 4; padding-bottom: 56px; }
+.start h1 {
+  font-size: clamp(2.75rem, 5.4vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  max-width: 7ch; /* Vor- und Nachname untereinander, damit der Name nicht ans erste Bild stößt */
+  margin-bottom: 40px;
+}
+.start-bild { grid-column: 5 / span 8; margin: 0; justify-self: end; }
+.start-bild img { width: min(100%, calc((100svh - var(--kopf-hoehe) - 18vh) * var(--ar))); }
+
+/* Knopf: Kontur, keine Fläche – füllt sich erst beim Darüberfahren */
+.knopf {
+  display: inline-block;
+  font-family: var(--sans); font-size: 0.9375rem; letter-spacing: 0.01em;
+  text-decoration: none; white-space: nowrap;
+  padding: 13px 22px;
+  border: 1px solid var(--tinte);
+}
+.knopf:hover { background: var(--tinte); color: var(--papier); }
+.knopf:active { transform: translateY(1px); }
+
+/* --- Bildunterschrift ----------------------------------------------------- */
+figcaption, .drucke p {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px;
+  margin-top: 14px;
+  font-family: var(--sans); font-size: 0.8125rem; line-height: 1.4;
+}
+.bu-nr { font-size: 0.875rem; font-weight: 500; color: var(--tinte); }
+.bu-titel { font-size: 0.875rem; font-weight: 500; }
+.bu-meta { color: var(--leise); }
+
+/* --- Ausstellungs-Scroll: ein Werk pro Bildschirm ------------------------- */
+.werke { padding: 0 var(--rand); }
+
+.werk {
+  margin: 0;
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 10vh 0;
+}
+.werk img { width: min(var(--breite, 72vw), calc(72svh * var(--ar))); }
+.werk--mitte  { align-items: center; --breite: 72vw; }
+/* Bildunterschrift bündig unter dem Bild, nicht unter der ganzen Zeile */
+.werk figcaption { width: min(var(--breite, 72vw), calc(72svh * var(--ar))); }
+
+/* --- Über Milan: ein Satz wie ein Wandtext, darunter die Signatur -------- */
+.ueber {
+  display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px;
+  padding: 16vh var(--rand) 18vh;
+}
+.ueber-text {
+  grid-column: 3 / span 7;
+  font-size: clamp(1.5rem, 2.2vw, 2rem); line-height: 1.42; font-weight: 300;
+  letter-spacing: -0.005em; max-width: 30ch; margin-bottom: 28px;
+}
+.ueber-zeile { grid-column: 3 / span 7; font-family: var(--sans); font-size: 0.875rem; color: var(--leise); margin: 0; }
+
+/* --- Ausstellung ---------------------------------------------------------- */
+.ausstellung {
+  display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px;
+  padding: 14vh var(--rand) 18vh;
+  border-top: 1px solid var(--linie);
+  margin: 0 var(--rand);
+  padding-left: 0; padding-right: 0;
+}
+.ausstellung-text { grid-column: 1 / span 5; max-width: 36ch; }
+.ausstellung h2 { white-space: nowrap; }
+.ausstellung h2 { font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.1; margin-bottom: 28px; }
+.drucke-block { grid-column: 7 / span 6; }
+.drucke-titel { font-family: var(--sans); font-size: 0.8125rem; color: var(--leise); margin-bottom: 18px; }
+.drucke {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 24px; align-items: start;
+}
+.drucke a { display: block; }
+.drucke a img { transition: opacity 0.4s ease; }
+.drucke a:hover img { opacity: 0.85; }
+.drucke p { margin-top: 10px; display: grid; gap: 2px; }
+
+/* --- Kontakt (im Ausstellungs-Teil) --------------------------------------- */
+.kontakt-links { display: grid; gap: 10px; justify-items: start; margin-top: 28px; }
+.kontakt-links .mail { font-size: clamp(1.5rem, 2.2vw, 1.875rem); }
+.kontakt-links .insta { font-family: var(--sans); font-size: 0.9375rem; color: var(--leise); }
+
+.fuss {
+  padding: 28px var(--rand);
+  border-top: 1px solid var(--linie);
+  font-family: var(--sans); font-size: 0.8125rem; color: var(--leise);
+}
+.fuss { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+.fuss p { margin: 0; }
+.fuss-links { display: flex; gap: 20px; }
+.fuss a { color: var(--leise); text-decoration: none; }
+.fuss a:hover { color: var(--tinte); text-decoration: underline; }
+.fuss a:active { color: var(--tinte); }
+
+/* --- Impressum & Datenschutz ---------------------------------------------- */
+.rechtstext { max-width: calc(64ch + 2 * var(--rand)); padding: 9vh var(--rand) 14vh; font-size: 1rem; }
+.rechtstext h1 { font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.1; margin-bottom: 5vh; }
+.rechtstext h2 { font-size: 1rem; font-weight: 500; margin: 2.4em 0 0.6em; }
+.rechtstext p { color: var(--tinte); }
+.rechtstext .stand { margin-top: 2.4em; color: var(--leise); font-size: 0.875rem; }
+
+/* --- Übersicht: alle Werke klein im Raster ------------------------------- */
+.uebersicht { padding: 9vh var(--rand) 16vh; }
+.uebersicht h1 { font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.1; margin-bottom: 7vh; }
+.raster {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 56px 32px; align-items: end;
+}
+.raster a { display: block; text-decoration: none; }
+.raster img { width: 100%; transition: opacity 0.35s ease; }
+.raster a:hover img { opacity: 0.82; }
+.raster a:active img { opacity: 0.7; }
+.raster .bu-nr { display: block; margin-top: 10px; }
+@media (max-width: 1099px) { .raster { grid-template-columns: repeat(3, 1fr); } }
+
+/* --- Großansicht in der Übersicht (ruhiger Grund, kein Scrollen) --------- */
+html.gross-offen { overflow: hidden; }
+dialog.gross {
+  width: 100vw; height: 100dvh; max-width: none; max-height: none;
+  margin: 0; padding: 0; border: 0;
+  background: var(--papier); color: var(--tinte);
+}
+dialog.gross::backdrop { background: var(--papier); }
+dialog.gross[open] { display: grid; grid-template-columns: 72px 1fr 72px; align-items: center; }
+dialog.gross figure { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+dialog.gross img {
+  width: auto; height: auto;
+  max-width: calc(100vw - 176px); max-height: calc(100dvh - 150px);
+  opacity: 0; transition: opacity 0.35s ease;
+}
+dialog.gross img.geladen { opacity: 1; }
+dialog.gross figcaption { margin-top: 16px; color: var(--leise); }
+dialog.gross button {
+  font-family: var(--sans); color: var(--leise); background: none; border: 0; cursor: pointer;
+}
+dialog.gross button:hover { color: var(--tinte); }
+dialog.gross button:focus-visible { outline: 2px solid var(--tinte); outline-offset: 4px; }
+dialog.gross button:active { transform: translateY(1px); }
+.gross-zu { position: absolute; z-index: 2; top: 20px; right: var(--rand); font-size: 0.875rem; padding: 8px 0; }
+/* Pfeilflächen nur im mittleren Bereich, damit oben rechts nur „Schließen“ reagiert */
+.gross-pfeil { font-size: 1.75rem; height: 60vh; width: 72px; align-self: center; }
+.gross-zurueck { grid-column: 1; grid-row: 1; }
+dialog.gross figure { grid-column: 2; grid-row: 1; }
+.gross-weiter { grid-column: 3; grid-row: 1; }
+
+/* --- Handy & schmale Fenster ---------------------------------------------- */
+@media (max-width: 899px) {
+  body { font-size: 1.0625rem; }
+  .kopf nav .nav-werke { display: none; }
+  .start { display: block; min-height: 0; padding-top: 12vh; padding-bottom: 0; }
+  .start-text { padding-bottom: 48px; }
+  .start-bild img, .werk img, .werk figcaption { width: 100%; }
+  .werk { min-height: 0; padding: 72px 0 0; align-items: stretch; }
+  .ueber { display: block; padding: 120px var(--rand) 104px; }
+  .ueber-text { font-size: 1.375rem; }
+  .ausstellung { display: block; padding: 120px 0 72px; }
+  .ausstellung-text { margin-bottom: 40px; }
+  .ausstellung h2 { white-space: normal; }
+  .drucke { grid-template-columns: repeat(2, 1fr); gap: 32px 16px; }
+  .ausstellung-text { margin-bottom: 56px; }
+  .uebersicht { padding-top: 56px; }
+  .start h1 { margin-bottom: 32px; max-width: none; }
+  dialog.gross[open] { grid-template-columns: 1fr; }
+  dialog.gross figure { grid-column: 1; }
+  dialog.gross img { max-width: calc(100vw - 32px); max-height: calc(100dvh - 200px); }
+  .gross-pfeil { position: absolute; bottom: 24px; height: 48px; width: 64px; }
+  .gross-zurueck { left: 8px; } .gross-weiter { right: 8px; }
+  .raster { grid-template-columns: repeat(2, 1fr); gap: 32px 16px; }
+}
+
+/* Trennpunkt zwischen Nummer (oder Titel) und Jahr – sonst stehen zwei Zahlen
+   direkt nebeneinander („Nr. 22  2022“) */
+figcaption .bu-nr + .bu-meta::before,
+figcaption .bu-titel + .bu-meta::before { content: "·"; margin-right: 14px; color: var(--leise); }
