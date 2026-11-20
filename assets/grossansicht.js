@@ -19,6 +19,8 @@
     bild.alt = a.querySelector("img")?.alt || "";
     text.textContent = a.dataset.unterschrift;
     if (bild.complete) bild.classList.add("geladen");
+    // Eigene Adresse je Bild (z. B. …/uebersicht.html#x-8c48c8a1) – so lässt sich ein Bild verlinken
+    if (a.dataset.kennung) history.replaceState(null, "", "#" + a.dataset.kennung);
   }
 
   links.forEach((a, i) => a.addEventListener("click", (ev) => {
@@ -30,6 +32,7 @@
 
   dialog.addEventListener("close", () => {
     document.documentElement.classList.remove("gross-offen");
+    history.replaceState(null, "", location.pathname + location.search); // Bild-Kennung wieder aus der Adresse
     links[aktuell].focus({ preventScroll: true }); // Fokus zurück, ohne zu springen
   });
   dialog.querySelector(".gross-zu").addEventListener("click", () => dialog.close());
@@ -41,6 +44,9 @@
     if (ev.key === "ArrowLeft") zeige(aktuell - 1);
     if (ev.key === "ArrowRight") zeige(aktuell + 1);
   });
+  // Kommt man über einen Bild-Link (#nr-12, #x-…), öffnet sich dieses Bild direkt
+  const start = links.findIndex(a => a.dataset.kennung && "#" + a.dataset.kennung === location.hash);
+  if (start >= 0) { zeige(start); document.documentElement.classList.add("gross-offen"); dialog.showModal(); }
   // Wischen auf dem Handy
   let startX = null;
   dialog.addEventListener("touchstart", (ev) => { startX = ev.touches[0].clientX; }, { passive: true });

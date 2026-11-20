@@ -219,6 +219,16 @@ figcaption, .drucke p {
 .raster + .raster { margin-top: 56px; }
 @media (max-width: 1099px) { .raster { grid-template-columns: repeat(3, 1fr); } }
 
+/* Kategorien (Milan 20.11.: mensch · natur · leben, bewusst klein geschrieben) */
+.uebersicht h1 { margin-bottom: 3vh; }
+.kategorien-nav { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-bottom: 9vh; font-size: 1.0625rem; }
+.kategorien-nav a { color: var(--leise); text-decoration: none; padding: 4px 0; }
+.kategorien-nav a:hover { color: var(--tinte); text-decoration: underline; text-underline-offset: 0.35em; }
+.kategorien-nav a:active { color: var(--tinte); }
+.kategorie + .kategorie { margin-top: 16vh; }
+.kategorie { scroll-margin-top: 40px; } /* nach dem Sprung etwas Luft unter der Kopfzeile */
+.kategorie h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 300; line-height: 1.1; margin-bottom: 5vh; }
+
 /* --- Großansicht in der Übersicht (ruhiger Grund, kein Scrollen) --------- */
 html.gross-offen { overflow: hidden; }
 dialog.gross {
@@ -276,6 +286,9 @@ dialog.gross figure { grid-column: 2; grid-row: 1; }
   .gross-zurueck { left: 8px; } .gross-weiter { right: 8px; }
   .raster { grid-template-columns: repeat(2, 1fr); gap: 32px 16px; }
   .raster + .raster { margin-top: 32px; }
+  .kategorien-nav { margin-bottom: 56px; }
+  .kategorie + .kategorie { margin-top: 96px; }
+  .kategorie h2 { margin-bottom: 28px; }
 }
 
 /* Trennpunkt zwischen Nummer (oder Titel) und Jahr – sonst stehen zwei Zahlen
